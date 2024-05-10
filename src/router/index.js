@@ -1,8 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import SignUp from '../components/SignUp.vue';
+import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
 
 const routes = [
+    {
+        path: '/',
+        name: 'Home',
+        component: Home,
+    },
     {
         path: '/signup',
         name: 'SignUp',
@@ -22,9 +28,9 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('authToken') !== null;
-    if (to.name !== 'Login' && to.name !== 'SignUp' && !isAuthenticated) next({ name: 'Login' });
+    if (to.meta.requiresAuth && !isAuthenticated) next({ name: 'Login' });
     else next();
-  });
+});
   
 
 export default router;

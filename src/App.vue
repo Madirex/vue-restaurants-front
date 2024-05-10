@@ -15,12 +15,14 @@
 <script>
 import SignUp from './components/SignUp.vue';
 import Login from './components/Login.vue';
+import Home from './components/Home.vue';
 import AppNavbar from './components/AppNavbar.vue';
 
 export default {
   components: {
     SignUp,
     Login,
+    Home,
     AppNavbar,
   },
   data() {
