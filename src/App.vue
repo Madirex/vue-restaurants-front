@@ -1,21 +1,35 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div id="nav">
+    <AppNavbar @check-auth="isAuthenticated" @logout="logout" />
+    <!-- Muestra el mensaje de éxito si el query param 'success' está presente -->
+    <div v-if="$route.query.success" class="alert alert-success">
+      {{ $route.query.success }}
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <router-view />
+  </div>
 </template>
+
+<script>
+import SignUp from './components/SignUp.vue';
+import Login from './components/Login.vue';
+import AppNavbar from './components/AppNavbar.vue';
+
+export default {
+  components: {
+    SignUp,
+    Login,
+    AppNavbar,
+  },
+  data() {
+    return {
+      isAuthenticated: false,
+    };
+  },
+};
+</script>
 
 <style scoped>
 header {
@@ -26,6 +40,8 @@ header {
   display: block;
   margin: 0 auto 2rem;
 }
+
+
 
 @media (min-width: 1024px) {
   header {
