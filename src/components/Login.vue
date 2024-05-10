@@ -48,6 +48,7 @@ export default {
   },
   methods: {
     async login() {
+
       this.isSubmitting = true;
 
       try {
@@ -57,7 +58,6 @@ export default {
         });
         const token = response.data.access_token;
         localStorage.setItem('authToken', token);
-        this.$router.push('/');
         window.location.reload();
       } catch (error) {
         this.isSubmitting = false;
@@ -74,7 +74,13 @@ export default {
       }
     },
   },
+  created() {
+    if (localStorage.getItem('authToken')) {
+      this.$router.push('/');
+    }
+  },
 };
+
 </script>
 
 <style scoped>

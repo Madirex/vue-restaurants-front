@@ -108,7 +108,6 @@ export default {
 
         const token = response.data.token;
         localStorage.setItem('authToken', token);
-        this.$router.push({ path: '/', query: { success: 'Registro exitoso' } });
         window.location.reload();
 
       } catch (error) {
@@ -136,6 +135,11 @@ export default {
         this.isSubmitting = false;
       }
     },
+  },
+  created() {
+    if (localStorage.getItem('authToken')) {
+      this.$router.push({ path: '/', query: { success: 'Registro exitoso' } });        
+    }
   },
 };
 </script>
