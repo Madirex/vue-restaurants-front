@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import SignUp from '../components/SignUp.vue';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
-import Categories from '../components/Categories.vue';
+import Categories from '../components/categories/Categories.vue';
 import Unauthorized from '@/components/Unauthorized.vue';
-import CategoryDetails from '@/components/CategoryDetails.vue';
-import CategoryCreateEdit from '@/components/CategoryCreateEdit.vue';
+import CategoryDetails from '@/components/categories/CategoryDetails.vue';
+import CategoryCreateEdit from '@/components/categories/CategoryCreateEdit.vue';
 
 const routes = [
     {
