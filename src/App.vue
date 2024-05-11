@@ -4,15 +4,18 @@
 <template>
   <div id="nav">
     <AppNavbar @check-auth="isAuthenticated" @logout="logout" />
-    <!-- Muestra el mensaje de éxito si el query param 'success' está presente -->
     <div v-if="$route.query.success" class="alert alert-success">
       {{ $route.query.success }}
+    </div>
+    <div v-if="$route.query.error" class="alert alert-danger">
+      {{ $route.query.error }}
     </div>
     <router-view />
   </div>
 </template>
 
 <script>
+import '@fortawesome/fontawesome-free/css/all.css';
 import SignUp from './components/SignUp.vue';
 import Login from './components/Login.vue';
 import Home from './components/Home.vue';
