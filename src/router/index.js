@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import SignUp from '../components/SignUp.vue';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
+import Categories from '../components/Categories.vue';
+import Unauthorized from '@/components/Unauthorized.vue';
 
 const routes = [
     {
@@ -18,6 +20,16 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login,
+    },
+    {
+        path: '/categories',
+        name: 'Categories',
+        component: Categories,
+    },
+    {
+        path: '/401',
+        name: 'Unauthorized',
+        component: Unauthorized,
     },
 ];
 

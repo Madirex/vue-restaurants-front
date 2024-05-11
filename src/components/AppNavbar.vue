@@ -19,11 +19,11 @@
             <router-link to="/about" class="nav-link">Acerca de</router-link>
           </li>
           <li class="nav-item">
-            <router-link to="/contact" class="nav-link">Contacto</router-link>
+            <router-link to="/categories" class="nav-link">Categorías</router-link>
           </li>
         </ul>
           <div v-if="isAuthTokenAvailable">
-            <router-link to="/" class="nav-link" @click="logout">Logout</router-link>
+            <router-link to="/" class="nav-link" @click="logout">Cerrar sesión</router-link>
           </div>
           <div v-else>
             <router-link to="/login" class="nav-link me-4">Iniciar sesión</router-link>
