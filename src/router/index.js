@@ -2,13 +2,16 @@ import { createRouter, createWebHistory } from 'vue-router';
 import SignUp from '../components/SignUp.vue';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
-import Categories from '../components/categories/Categories.vue';
-import Restaurants from '../components/restaurants/Restaurants.vue';
 import Unauthorized from '@/components/Unauthorized.vue';
+import Categories from '../components/categories/Categories.vue';
 import CategoryDetails from '@/components/categories/CategoryDetails.vue';
-import RestaurantDetails from '@/components/restaurants/RestaurantDetails.vue';
 import CategoryCreateEdit from '@/components/categories/CategoryCreateEdit.vue';
+import Restaurants from '../components/restaurants/Restaurants.vue';
+import RestaurantDetails from '@/components/restaurants/RestaurantDetails.vue';
 import RestaurantCreateEdit from '@/components/restaurants/RestaurantCreateEdit.vue';
+import CartCodes from '../components/cartcodes/CartCodes.vue';
+import CartCodeDetails from '@/components/cartcodes/CartCodeDetails.vue';
+import CartCodeCreateEdit from '@/components/cartcodes/CartCodeCreateEdit.vue';
 
 const routes = [
     {
@@ -27,33 +30,22 @@ const routes = [
         component: Login,
     },
     {
-        path: '/categories',
-        name: 'Categories',
-        component: Categories,
-    },
-    {
-        path: '/restaurants',
-        name: 'Restaurants',
-        component: Restaurants,
-    },
-    {
         path: '/401',
         name: 'Unauthorized',
         component: Unauthorized,
     },
     
-    /* Details */
+    /* categories */
+    {
+        path: '/categories',
+        name: 'Categories',
+        component: Categories,
+    },
     {
         path: '/categories/:id',
         name: 'CategoryDetails',
         component: CategoryDetails,
     },
-    {
-        path: '/restaurants/:id',
-        name: 'RestaurantDetails',
-        component: RestaurantDetails,
-    },
-    /* Create Edit */
     {
         path: '/categories/create',
         name: 'CategoryCreate',
@@ -68,6 +60,17 @@ const routes = [
         component: CategoryCreateEdit,
         props: route => ({ mode: 'edit', categoryId: route.params.id })
     },
+    /* restaurants */
+    {
+        path: '/restaurants',
+        name: 'Restaurants',
+        component: Restaurants,
+    },
+    {
+        path: '/restaurants/:id',
+        name: 'RestaurantDetails',
+        component: RestaurantDetails,
+    },
     {
         path: '/restaurants/create',
         name: 'RestaurantCreate',
@@ -81,6 +84,31 @@ const routes = [
         name: 'RestaurantEdit',
         component: RestaurantCreateEdit,
         props: route => ({ mode: 'edit', restaurantId: route.params.id })
+    },
+    /* cartcodes */
+    {
+        path: '/cartcodes',
+        name: 'CartCodes',
+        component: CartCodes,
+    },
+    {
+        path: '/cartcodes/:id',
+        name: 'CartCodeDetails',
+        component: CartCodeDetails,
+    },
+    {
+        path: '/cartcodes/create',
+        name: 'CartCodeCreate',
+        component: CartCodeCreateEdit,
+        props: {
+            mode: 'create'
+        }
+    },
+    {
+        path: '/cartcodes/:id/edit',
+        name: 'CartCodeEdit',
+        component: CartCodeCreateEdit,
+        props: route => ({ mode: 'edit', cartCodeId: route.params.id })
     },
 ];
 

@@ -28,6 +28,9 @@
                 <li class="nav-item">
                   <router-link to="/categories" class="nav-link">Categorías</router-link>
                 </li>
+                <li class="nav-item">
+                  <router-link to="/cartcodes" class="nav-link">Códigos de carrito</router-link>
+                </li>
               </ul>
             </li>
           </div>

@@ -86,6 +86,8 @@ export default {
       this.mode = 'edit';
       this.restaurantId = restaurantId;
       this.fetchRestaurantDetails();
+    } else {
+      this.loadingSpinnerEnable = false;
     }
   },
   methods: {
@@ -107,11 +109,12 @@ export default {
           address: this.restaurantAddress,
         };
         if (this.mode === 'create') {
-          await axios.post('/api/restaurants/', data);
-          this.$router.push({ path: '/restaurants', query: { success: 'Restaurante creado exitosamente' } });
+          const response = await axios.post('/api/restaurants/', data);
+          const createdRestaurantId = response.data.pk; // Obtener el ID del restaurante creado
+          this.$router.push({ path: `/restaurants/${createdRestaurantId}`, query: { success: 'Restaurante creado exitosamente' } });
         } else if (this.mode === 'edit') {
           await axios.put(`/api/restaurants/${this.restaurantId}/`, data);
-          this.$router.push({ path: '/restaurants', query: { success: 'Restaurante editado exitosamente' } });
+          this.$router.push({ path: `/restaurants/${this.restaurantId}`, query: { success: 'Restaurante editado exitosamente' } });
         }
       } catch (error) {
         console.error('Error al guardar el restaurante:', error.response.data);
@@ -130,6 +133,7 @@ export default {
         this.alert.type = 'alert-danger';
       }
     },
+
   },
 };
 </script>

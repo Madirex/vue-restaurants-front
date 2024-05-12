@@ -49,6 +49,8 @@ export default {
             this.mode = 'edit';
             this.categoryId = categoryId;
             this.fetchCategoryDetails();
+        } else {
+            this.loadingSpinnerEnable = false;
         }
     },
     methods: {
@@ -66,11 +68,12 @@ export default {
             try {
                 const data = { name: this.categoryName };
                 if (this.mode === 'create') {
-                    await axios.post('/api/categories/', data);
-                    this.$router.push({ path: '/categories', query: { success: 'Categoría creada exitosamente' } });
+                    const response = await axios.post('/api/categories/', data);
+                    const createdCategoryId = response.data.pk; // Obtener el ID de la categoría creada
+                    this.$router.push({ path: `/categories/${createdCategoryId}`, query: { success: 'Categoría creada exitosamente' } });
                 } else if (this.mode === 'edit') {
                     await axios.put(`/api/categories/${this.categoryId}/`, data);
-                    this.$router.push({ path: '/categories', query: { success: 'Categoría editada exitosamente' } });
+                    this.$router.push({ path: `/categories/${this.categoryId}`, query: { success: 'Categoría editada exitosamente' } });
                 }
             } catch (error) {
                 console.error('Error al guardar la categoría:', error.response.data);
