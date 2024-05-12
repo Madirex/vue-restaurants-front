@@ -6,7 +6,12 @@
             {{ alert.message }}
         </div>
 
-        <form @submit.prevent="handleSubmit">
+        <div v-if="loadingSpinnerEnable" class="loading-indicator">
+            <div v-if="startTimeEnableSpinner" class="spinner-border orange-spinner" role="status">
+                <span>🍕</span>
+            </div>
+        </div>
+        <form v-else @submit.prevent="handleSubmit">
             <div class="form-group mb-4">
                 <label for="name">Nombre:</label>
                 <input type="text" v-model="categoryName" class="form-control" id="name" required>
@@ -29,9 +34,15 @@ export default {
                 message: '',
                 type: '',
             },
+            loadingSpinnerEnable: true,
+            startTimeEnableSpinner: false,
         };
     },
     created() {
+        //timeout
+        setTimeout(() => {
+            this.startTimeEnableSpinner = true;
+        }, 1000);
         // Verificar si se está editando una categoría existente
         const categoryId = this.$route.params.id;
         if (categoryId) {
@@ -47,6 +58,8 @@ export default {
                 this.categoryName = response.data.name;
             } catch (error) {
                 console.error('Error al obtener los detalles de la categoría:', error);
+            } finally {
+                this.loadingSpinnerEnable = false;
             }
         },
         async handleSubmit() {
