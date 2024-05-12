@@ -3,9 +3,12 @@ import SignUp from '../components/SignUp.vue';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
 import Categories from '../components/categories/Categories.vue';
+import Restaurants from '../components/restaurants/Restaurants.vue';
 import Unauthorized from '@/components/Unauthorized.vue';
 import CategoryDetails from '@/components/categories/CategoryDetails.vue';
+import RestaurantDetails from '@/components/restaurants/RestaurantDetails.vue';
 import CategoryCreateEdit from '@/components/categories/CategoryCreateEdit.vue';
+import RestaurantCreateEdit from '@/components/restaurants/RestaurantCreateEdit.vue';
 
 const routes = [
     {
@@ -29,16 +32,28 @@ const routes = [
         component: Categories,
     },
     {
+        path: '/restaurants',
+        name: 'Restaurants',
+        component: Restaurants,
+    },
+    {
         path: '/401',
         name: 'Unauthorized',
         component: Unauthorized,
     },
     
+    /* Details */
     {
         path: '/categories/:id',
         name: 'CategoryDetails',
         component: CategoryDetails,
     },
+    {
+        path: '/restaurants/:id',
+        name: 'RestaurantDetails',
+        component: RestaurantDetails,
+    },
+    /* Create Edit */
     {
         path: '/categories/create',
         name: 'CategoryCreate',
@@ -52,6 +67,20 @@ const routes = [
         name: 'CategoryEdit',
         component: CategoryCreateEdit,
         props: route => ({ mode: 'edit', categoryId: route.params.id })
+    },
+    {
+        path: '/restaurants/create',
+        name: 'RestaurantCreate',
+        component: RestaurantCreateEdit,
+        props: {
+            mode: 'create'
+        }
+    },
+    {
+        path: '/restaurants/:id/edit',
+        name: 'RestaurantEdit',
+        component: RestaurantCreateEdit,
+        props: route => ({ mode: 'edit', restaurantId: route.params.id })
     },
 ];
 

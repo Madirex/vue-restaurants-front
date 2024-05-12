@@ -2,6 +2,8 @@
   <div class="container mt-4">
     <h2>Categorías</h2>
 
+    <button v-if="isAdmin" type="button" class="btn btn-success mb-3" @click="createCategory">Crear categoría</button>
+
     <div v-for="category in categories" :key="category.pk" class="category" @click="redirectToCategory(category.pk)">
       {{ category.name }}
 
@@ -202,7 +204,9 @@ export default {
       this.showModal = false;
       this.categoryToDelete = null;
     },
-
+    createCategory() {
+      this.$router.push('/categories/create');
+    },
   },
 };
 </script>
