@@ -1,17 +1,18 @@
+import Unauthorized from '@/components/Unauthorized.vue';
+import CartCodeCreateEdit from '@/components/cartcodes/CartCodeCreateEdit.vue';
+import CartCodeDetails from '@/components/cartcodes/CartCodeDetails.vue';
+import CategoryCreateEdit from '@/components/categories/CategoryCreateEdit.vue';
+import CategoryDetails from '@/components/categories/CategoryDetails.vue';
+import DishCreateEdit from '@/components/dishes/DishCreateEdit.vue';
+import RestaurantCreateEdit from '@/components/restaurants/RestaurantCreateEdit.vue';
+import RestaurantDetails from '@/components/restaurants/RestaurantDetails.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import SignUp from '../components/SignUp.vue';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
-import Unauthorized from '@/components/Unauthorized.vue';
-import Categories from '../components/categories/Categories.vue';
-import CategoryDetails from '@/components/categories/CategoryDetails.vue';
-import CategoryCreateEdit from '@/components/categories/CategoryCreateEdit.vue';
-import Restaurants from '../components/restaurants/Restaurants.vue';
-import RestaurantDetails from '@/components/restaurants/RestaurantDetails.vue';
-import RestaurantCreateEdit from '@/components/restaurants/RestaurantCreateEdit.vue';
+import SignUp from '../components/SignUp.vue';
 import CartCodes from '../components/cartcodes/CartCodes.vue';
-import CartCodeDetails from '@/components/cartcodes/CartCodeDetails.vue';
-import CartCodeCreateEdit from '@/components/cartcodes/CartCodeCreateEdit.vue';
+import Categories from '../components/categories/Categories.vue';
+import Restaurants from '../components/restaurants/Restaurants.vue';
 
 const routes = [
     {
@@ -34,7 +35,7 @@ const routes = [
         name: 'Unauthorized',
         component: Unauthorized,
     },
-    
+
     /* categories */
     {
         path: '/categories',
@@ -110,6 +111,20 @@ const routes = [
         component: CartCodeCreateEdit,
         props: route => ({ mode: 'edit', cartCodeId: route.params.id })
     },
+    /* dishes */
+    {
+        path: '/restaurant/:restaurantId/dish/create',
+        name: 'DishCreate',
+        component: DishCreateEdit,
+        props: true
+    },
+    {
+        path: '/restaurants/:restaurantId/dishes/:id/edit',
+        name: 'DishEdit',
+        component: DishCreateEdit,
+        props: route => ({ mode: 'edit', dishId: route.params.id, restaurantId: route.params.restaurantId })
+    },
+
 ];
 
 const router = createRouter({
@@ -133,6 +148,6 @@ router.beforeEach((to, from, next) => {
         next();
     }
 });
-  
+
 
 export default router;
