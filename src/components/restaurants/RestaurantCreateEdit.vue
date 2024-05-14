@@ -103,12 +103,24 @@ export default {
       }
     },
     async handleSubmit() {
+      let createdCalendar = false;
       try {
         const data = {
           name: this.restaurantName,
           address: this.restaurantAddress,
         };
         if (this.mode === 'create') {
+          // Crear calendar
+          const calendarData = {
+            normal_start_date: `2000-03-01`,
+            summer_start_date: `2000-06-01`,
+            winter_start_date: `2000-12-01`,
+          };
+          const calendarResponse = await axios.post('/api/calendars/', calendarData);
+          const createdCalendarId = calendarResponse.data.pk;
+          data.calendar = createdCalendarId;
+          createdCalendar = true;
+
           const response = await axios.post('/api/restaurants/', data);
           const createdRestaurantId = response.data.pk; // Obtener el ID del restaurante creado
           this.$router.push({ path: `/restaurants/${createdRestaurantId}`, query: { success: 'Restaurante creado exitosamente' } });
@@ -117,6 +129,21 @@ export default {
           this.$router.push({ path: `/restaurants/${this.restaurantId}`, query: { success: 'Restaurante editado exitosamente' } });
         }
       } catch (error) {
+        if (createdCalendar){
+          // Eliminar calendar creado
+          axios.delete(`/api/calendars/${this.restaurantId}/`)
+            .then(response => {
+              if (response.status === 204) {
+                console.log(`Calendario con ID ${this.restaurantId} eliminado exitosamente.`);
+              } else {
+                console.error('Error al eliminar el calendario:', response);
+              }
+            })
+            .catch(error => {
+              console.error('Error al eliminar el calendario:', error);
+            });
+        }
+
         console.error('Error al guardar el restaurante:', error.response.data);
         const errors = error.response.data;
         let errorMessage = 'Error al guardar el restaurante.';

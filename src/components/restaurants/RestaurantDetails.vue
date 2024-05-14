@@ -5,12 +5,18 @@
 
       <!-- Dirección del Restaurante -->
       <div v-if="restaurant.address" class="address">
-        <span v-if="restaurant.address.street">{{ restaurant.address.street }}, </span>
-        <span v-if="restaurant.address.number">{{ restaurant.address.number }}, </span>
-        <span v-if="restaurant.address.city">{{ restaurant.address.city }}, </span>
-        <span v-if="restaurant.address.province">{{ restaurant.address.province }}, </span>
-        <span v-if="restaurant.address.country">{{ restaurant.address.country }}, </span>
-        <span v-if="restaurant.address.postal_code">{{ restaurant.address.postal_code }}</span>
+        <span>
+          {{
+            [
+              restaurant.address.street,
+              restaurant.address.number,
+              restaurant.address.city,
+              restaurant.address.province,
+              restaurant.address.country,
+              restaurant.address.postal_code
+            ].filter(Boolean).join(', ')
+          }}
+        </span>
       </div>
 
       <h3>Platos</h3>
@@ -142,6 +148,20 @@ export default {
       this.selectedDish = null;
     },
     handleDeleteConfirmation({ type, id }) {
+      const calendarId = this.restaurant.calendar;
+      // eliminar calendar asociado
+      axios.delete(`/api/calendars/${calendarId}/`)
+        .then(response => {
+          if (response.status === 204) {
+            console.log(`Calendario con ID ${calendarId} eliminado exitosamente.`);
+          } else {
+            console.error('Error al eliminar el calendario:', response);
+          }
+        })
+        .catch(error => {
+          console.error('Error al eliminar el calendario:', error);
+        });
+      // eliminar restaurant
       axios.delete(`/api/${type}/${id}/`)
         .then(response => {
           if (response.status === 204) {
