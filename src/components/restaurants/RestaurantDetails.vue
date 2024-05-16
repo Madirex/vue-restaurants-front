@@ -61,6 +61,26 @@
         </div>
       </div>
 
+      <h3>Horarios</h3>
+      <div class="calendar-container">
+        <!-- Indicador de carga -->
+        <div v-if="loadingSchedules && !waitingLoadingDelay" class="loading-overlay">
+          <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <vue-cal :events="schedules" class="vuecal" @view-change="handleViewChange" @cell-click="handleCellClick">
+          <template v-slot:event="{ event }">
+            <div :style="{ backgroundColor: event.class === 'schedule-open' ? '#5b9e5b' : 'red', color: 'white' }">{{
+              event.title }}</div>
+          </template>
+
+          <template #events-count="{ events }">
+            <span :style="{ fontWeight: 'bold' }">{{ events.length }}
+            </span>
+          </template>
+        </vue-cal>
+      </div>
 
       <!-- Panel solo si es admin -->
       <div v-if="isAdmin">
@@ -95,10 +115,13 @@
 <script>
 import ConfirmDelete from '@/components/ConfirmDelete.vue';
 import axios from 'axios';
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
 
 export default {
   components: {
     ConfirmDelete,
+    VueCal,
   },
   data() {
     return {
@@ -112,6 +135,11 @@ export default {
         type: '',
       },
       imagePath: '',
+      schedules: [],
+      startDate: new Date(),  // Fecha de inicio
+      endDate: new Date(new Date().setMonth(new Date().getMonth() + 1)),  // Fecha de fin (1 mes después)
+      loadingSchedules: false,
+      waitingLoadingDelay: false,
     };
   },
   created() {
@@ -120,6 +148,7 @@ export default {
       this.loadingSpinnerEnable = true;
     }, 1000);
     this.fetchRestaurantDetails();
+    this.fetchRestaurantSchedules();
   },
   methods: {
     async fetchRestaurantDetails() {
@@ -137,6 +166,55 @@ export default {
         console.error('Error al obtener los detalles del restaurante:', error);
       }
     },
+    async fetchRestaurantSchedules() {
+      if (!this.startDate || !this.endDate) {
+        return;
+      }
+
+      this.loadingSchedules = true;
+      this.waitingLoadingDelay = true;
+
+      // esperar 1 segundo antes de poner el waitingloadingdelay como false si este es true
+      setTimeout(() => {
+        if (this.waitingLoadingDelay) {
+          this.waitingLoadingDelay = false;
+        }
+      }, 1000);
+
+      try {
+        const id = this.$route.params.id;
+        const response = await axios.get(`/api/restaurants/${id}/schedules/`, {
+          params: {
+            start_date: this.startDate.toISOString().split('T')[0],
+            end_date: this.endDate.toISOString().split('T')[0],
+          },
+        });
+
+        if (Array.isArray(response.data)) {
+          this.schedules = response.data.flatMap(schedule => {
+            return schedule.schedule.map(time => ({
+              start: new Date(`${schedule.date}T${time}`),
+              end: new Date(`${schedule.date}T${new Date(new Date(`${schedule.date}T${time}`).getTime() + 30 * 60000).toISOString().split('T')[1]}`), // Añadir 30 minutos a la hora de inicio
+              title: 'Abierto',
+              class: 'schedule-open',
+            }));
+          });
+
+        } else {
+          console.error('response.data no es un array:', response.data);
+        }
+      } catch (error) {
+        console.error('Error al obtener los horarios del restaurante:', error);
+      } finally {
+        this.loadingSchedules = false;
+        this.waitingLoadingDelay = false;
+      }
+    },
+    handleViewChange({ startDate, endDate }) {
+      this.startDate = new Date(startDate);
+      this.endDate = new Date(endDate);
+      this.fetchRestaurantSchedules();
+    },
     showDeleteModal() {
       this.showModal = true;
     },
@@ -148,20 +226,6 @@ export default {
       this.selectedDish = null;
     },
     handleDeleteConfirmation({ type, id }) {
-      const calendarId = this.restaurant.calendar;
-      // eliminar calendar asociado
-      axios.delete(`/api/calendars/${calendarId}/`)
-        .then(response => {
-          if (response.status === 204) {
-            console.log(`Calendario con ID ${calendarId} eliminado exitosamente.`);
-          } else {
-            console.error('Error al eliminar el calendario:', response);
-          }
-        })
-        .catch(error => {
-          console.error('Error al eliminar el calendario:', error);
-        });
-      // eliminar restaurant
       axios.delete(`/api/${type}/${id}/`)
         .then(response => {
           if (response.status === 204) {
@@ -200,8 +264,7 @@ export default {
         .finally(() => {
           this.selectedDish = null;
         });
-    }
-
+    },
   },
 };
 </script>
@@ -252,5 +315,27 @@ export default {
 .admin-panel {
   bottom: 10px;
   right: 10px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.calendar-container {
+  position: relative;
+}
+
+.schedule-open {
+  background-color: green !important;
+  color: white !important;
 }
 </style>
