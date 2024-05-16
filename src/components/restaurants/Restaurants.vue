@@ -129,22 +129,6 @@ export default {
             this.showModal = false;
         },
         handleDeleteConfirmation({ type }) {
-
-            const calendarId = this.restaurants.find(restaurant => restaurant.pk === this.deleteId).calendar;
-
-            // eliminar calendar asociado
-            axios.delete(`/api/calendars/${calendarId}/`)
-                .then(response => {
-                    if (response.status === 204) {
-                        console.log(`Calendario con ID ${calendarId} eliminado exitosamente.`);
-                    } else {
-                        console.error('Error al eliminar el calendario:', response);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al eliminar el calendario:', error);
-                });
-            // eliminar restaurant
             axios.delete(`/api/${type}/${this.deleteId}/`)
                 .then(response => {
                     if (response.status === 204) {
