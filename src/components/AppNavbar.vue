@@ -74,8 +74,10 @@ export default {
   methods: {
     logout() {
       window.localStorage.removeItem('authToken');
+      window.localStorage.removeItem('isAdmin');
       this.authToken = null;
       this.$emit('logout');
+      this.$router.go();
     }
   }
 };
