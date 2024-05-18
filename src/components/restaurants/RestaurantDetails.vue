@@ -80,6 +80,16 @@
             </span>
           </template>
         </vue-cal>
+
+        <div v-if="isAdmin">
+          <router-link :to="{ name: 'SeasonalCalendarConfig', params: { restaurantId: restaurant.pk } }" class="btn btn-info m-2">
+            <i class="fas fa-calendar-alt"></i> Configurar calendario estacional
+          </router-link>
+          
+          <router-link :to="{ name: 'ClosedDaysConfig', params: { restaurantId: restaurant.pk } }" class="btn btn-warning m-2">
+            <i class="fas fa-calendar-times"></i> Configurar días cerrados
+          </router-link>
+        </div>
       </div>
 
       <!-- Panel solo si es admin -->

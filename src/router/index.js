@@ -13,6 +13,7 @@ import SignUp from '../components/SignUp.vue';
 import CartCodes from '../components/cartcodes/CartCodes.vue';
 import Categories from '../components/categories/Categories.vue';
 import Restaurants from '../components/restaurants/Restaurants.vue';
+import ClosedDaysConfig from '../components/calendars/ClosedDaysConfig.vue';
 
 const routes = [
     {
@@ -124,7 +125,19 @@ const routes = [
         component: DishCreateEdit,
         props: route => ({ mode: 'edit', dishId: route.params.id, restaurantId: route.params.restaurantId })
     },
-
+    /* calendars */
+    {
+        path: '/restaurants/:restaurantId/seasonal-calendar-config',
+        name: 'SeasonalCalendarConfig',
+        component: DishCreateEdit,
+        props: route => ({ mode: 'edit', dishId: route.params.id, restaurantId: route.params.restaurantId })
+    },
+    {
+        path: '/restaurants/:restaurantId/closed-days-config',
+        name: 'ClosedDaysConfig',
+        component: ClosedDaysConfig,
+        props: route => ({ restaurantId: route.params.restaurantId })
+    },
 ];
 
 const router = createRouter({
