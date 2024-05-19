@@ -87,11 +87,16 @@
             <i class="fas fa-calendar-alt"></i> Configurar calendario estacional
           </router-link>
 
+          <router-link :to="{ name: 'CustomSchedulesConfig', params: { restaurantId: restaurant.pk } }"
+            class="btn btn-info m-2">
+            <i class="fas fa-calendar-alt"></i> Configurar horarios personalizados
+          </router-link>
 
           <router-link :to="{ name: 'ClosedDaysConfig', params: { restaurantId: restaurant.pk } }"
             class="btn btn-warning m-2">
             <i class="fas fa-calendar-times"></i> Configurar días cerrados
           </router-link>
+          
         </div>
       </div>
 

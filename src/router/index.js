@@ -10,11 +10,12 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
 import SignUp from '../components/SignUp.vue';
+import CalendarSeasonsConfig from '../components/calendars/CalendarSeasonsConfig.vue';
+import ClosedDaysConfig from '../components/calendars/ClosedDaysConfig.vue';
+import CustomSchedulesConfig from '../components/calendars/CustomSchedulesConfig.vue';
 import CartCodes from '../components/cartcodes/CartCodes.vue';
 import Categories from '../components/categories/Categories.vue';
 import Restaurants from '../components/restaurants/Restaurants.vue';
-import ClosedDaysConfig from '../components/calendars/ClosedDaysConfig.vue';
-import CalendarSeasonsConfig from '../components/calendars/CalendarSeasonsConfig.vue';
 
 const routes = [
     {
@@ -139,6 +140,13 @@ const routes = [
         component: ClosedDaysConfig,
         props: route => ({ restaurantId: route.params.restaurantId })
     },
+    {
+        path: '/restaurants/:restaurantId/custom-schedules-config',
+        name: 'CustomSchedulesConfig',
+        component: CustomSchedulesConfig,
+        props: route => ({ restaurantId: route.params.restaurantId })
+      },
+      
 ];
 
 const router = createRouter({
