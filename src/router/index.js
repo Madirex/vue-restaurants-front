@@ -14,6 +14,7 @@ import CartCodes from '../components/cartcodes/CartCodes.vue';
 import Categories from '../components/categories/Categories.vue';
 import Restaurants from '../components/restaurants/Restaurants.vue';
 import ClosedDaysConfig from '../components/calendars/ClosedDaysConfig.vue';
+import CalendarSeasonsConfig from '../components/calendars/CalendarSeasonsConfig.vue';
 
 const routes = [
     {
@@ -128,9 +129,9 @@ const routes = [
     /* calendars */
     {
         path: '/restaurants/:restaurantId/seasonal-calendar-config',
-        name: 'SeasonalCalendarConfig',
-        component: DishCreateEdit,
-        props: route => ({ mode: 'edit', dishId: route.params.id, restaurantId: route.params.restaurantId })
+        name: 'CalendarSeasonsConfig',
+        component: CalendarSeasonsConfig,
+        props: route => ({ restaurantId: route.params.restaurantId })
     },
     {
         path: '/restaurants/:restaurantId/closed-days-config',
