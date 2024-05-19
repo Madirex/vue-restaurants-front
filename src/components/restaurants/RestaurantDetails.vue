@@ -18,9 +18,10 @@
           }}
         </span>
       </div>
+      
+      <h2>Menú</h2>
 
-      <h3>Platos</h3>
-      <router-link :to="{ name: 'DishCreate', params: { restaurantId: restaurant.pk } }" class="btn btn-success m-2">
+      <router-link v-if="isAdmin" :to="{ name: 'DishCreate', params: { restaurantId: restaurant.pk } }" class="btn btn-success m-2">
         <i class="fas fa-plus"></i> Crear plato
       </router-link>
       <!-- Contenedor del slider -->
@@ -57,6 +58,11 @@
                 <i class="fas fa-edit"></i>
               </router-link>
             </div>
+          </div>
+
+          <!-- si dishes está vacío -->
+          <div v-if="dishes.length === 0" class="alert alert-info" role="alert">
+            No hay platos disponibles
           </div>
         </div>
       </div>
