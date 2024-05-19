@@ -109,6 +109,14 @@ export default {
           name: this.restaurantName,
           address: this.restaurantAddress,
         };
+
+        // dar error si el código postal no es un código de postal español válido
+        if (!/^\d{5}$/.test(data.address.postal_code)) {
+          this.alert.message = 'El código postal debe ser un código postal español válido.';
+          this.alert.type = 'alert-danger';
+          return;
+        }
+
         if (this.mode === 'create') {
           // Crear calendar
           const calendarData = {

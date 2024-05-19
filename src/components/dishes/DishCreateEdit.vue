@@ -11,7 +11,7 @@
         <span>🍕</span>
       </div>
     </div>
-    <form v-else @submit.prevent="handleSubmit">
+     <form v-else @submit.prevent="handleSubmit">
       <div class="form-group mb-4">
         <label for="name">Nombre:</label>
         <input type="text" v-model="dishData.name" class="form-control" id="name" required>
@@ -124,7 +124,6 @@ export default {
       try {
         const response = await axios.get(`/api/categories/`);
         const responseData = response.data;
-        console.log(responseData)
         if (responseData && responseData.results && responseData.results.length > 0) {
           this.categories = responseData.results;
         } else {
