@@ -106,6 +106,12 @@
         </div>
       </div>
 
+      <div>
+    <h3>Plano del restaurante</h3>
+    <RestaurantMap :restaurant="restaurant" @editSlot="editSlot" />
+  </div>
+
+
       <!-- Panel solo si es admin -->
       <div v-if="isAdmin">
         <!-- Botón de eliminación -->
@@ -141,10 +147,12 @@ import ConfirmDelete from '@/components/ConfirmDelete.vue';
 import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
+import RestaurantMap from './RestaurantMap.vue';
 
 export default {
   components: {
     ConfirmDelete,
+    RestaurantMap,
     VueCal,
   },
   data() {
