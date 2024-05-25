@@ -13,7 +13,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto">
           <li class="nav-item">
-            <router-link to="/" class="nav-link">Inicio</router-link>
+            <router-link to="/" class="nav-link">Restaurantes</router-link>
           </li>
           <li class="nav-item">
             <router-link to="/about" class="nav-link">Acerca de</router-link>
