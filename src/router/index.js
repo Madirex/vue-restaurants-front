@@ -7,6 +7,7 @@ import DishCreateEdit from '@/components/dishes/DishCreateEdit.vue';
 import RestaurantCreateEdit from '@/components/restaurants/RestaurantCreateEdit.vue';
 import RestaurantDetails from '@/components/restaurants/RestaurantDetails.vue';
 import { createRouter, createWebHistory } from 'vue-router';
+import About from '../components/About.vue';
 import Home from '../components/Home.vue';
 import Login from '../components/Login.vue';
 import SignUp from '../components/SignUp.vue';
@@ -15,6 +16,7 @@ import ClosedDaysConfig from '../components/calendars/ClosedDaysConfig.vue';
 import CustomSchedulesConfig from '../components/calendars/CustomSchedulesConfig.vue';
 import CartCodes from '../components/cartcodes/CartCodes.vue';
 import Categories from '../components/categories/Categories.vue';
+import RestaurantMap from '../components/restaurants/RestaurantMap.vue';
 import Restaurants from '../components/restaurants/Restaurants.vue';
 
 const routes = [
@@ -37,6 +39,12 @@ const routes = [
         path: '/401',
         name: 'Unauthorized',
         component: Unauthorized,
+    },
+
+    {
+        path: '/about',
+        name: 'About',
+        component: About,
     },
 
     /* categories */
@@ -145,8 +153,9 @@ const routes = [
         name: 'CustomSchedulesConfig',
         component: CustomSchedulesConfig,
         props: route => ({ restaurantId: route.params.restaurantId })
-      },
-      
+    },
+    { path: '/restaurants/:id', name: 'RestaurantDetails', component: RestaurantDetails },
+    { path: '/restaurants/:id/map', name: 'RestaurantMap', component: RestaurantMap },
 ];
 
 const router = createRouter({
