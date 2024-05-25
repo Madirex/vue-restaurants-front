@@ -18,10 +18,11 @@
           }}
         </span>
       </div>
-      
+
       <h2>Menú</h2>
 
-      <router-link v-if="isAdmin" :to="{ name: 'DishCreate', params: { restaurantId: restaurant.pk } }" class="btn btn-success m-2">
+      <router-link v-if="isAdmin" :to="{ name: 'DishCreate', params: { restaurantId: restaurant.pk } }"
+        class="btn btn-success m-2">
         <i class="fas fa-plus"></i> Crear plato
       </router-link>
       <!-- Contenedor del slider -->
@@ -102,14 +103,14 @@
             class="btn btn-warning m-2">
             <i class="fas fa-calendar-times"></i> Configurar días cerrados
           </router-link>
-          
+
         </div>
       </div>
 
       <div>
-    <h3>Plano del restaurante</h3>
-    <RestaurantMap :restaurant="restaurant" @editSlot="editSlot" />
-  </div>
+        <h3>Plano del restaurante</h3>
+        <RestaurantMap :restaurant="restaurant" @editSlot="editSlot" />
+      </div>
 
 
       <!-- Panel solo si es admin -->
