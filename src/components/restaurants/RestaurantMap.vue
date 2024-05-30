@@ -1,40 +1,40 @@
-<template>
-  <div class="map-container">
-    <h2>Plano del Restaurante</h2>
-    <div v-if="isAdmin" class="controls">
-      <label for="size">Tamaño del Plano:</label>
-      <input type="number" v-model="size" :min="minSize" max="20" @input="validateSize($event)" />
-      <p><i>El tamaño máximo permitido es 20.</i></p>
-    </div>
-    <div v-if="tablesLoaded">
-      <div class="grid" :style="{ gridTemplateColumns: `repeat(${size}, 1fr)` }">
-        <div v-for="slot in slots" :key="slot.id" class="grid-slot"
-          :class="{ occupied: slot.occupied, 'admin-cursor': isAdmin }" draggable="true" @dragstart="dragStart(slot)"
-          @dragover.prevent @drop="drop(slot)">
-          <img src="/table.png" v-if="slot.occupied" class="table-icon" alt="Mesa" />
-          <div v-if="slot.occupied && isAdmin" class="edit-button" @click.stop="editSlot(slot)">
+  <template>
+    <div class="map-container">
+      <h2>Plano del Restaurante</h2>
+      <div v-if="isAdmin" class="controls">
+        <label for="size">Tamaño del Plano:</label>
+        <input type="number" v-model="size" :min="minSize" max="20" @input="validateSize($event)" />
+        <p><i>El tamaño máximo permitido es 20.</i></p>
+      </div>
+      <div v-if="tablesLoaded">
+        <div class="grid" :style="{ gridTemplateColumns: `repeat(${size}, 1fr)` }">
+          <div v-for="slot in slots" :key="slot.id" class="grid-slot"
+            :class="{ isTableOccupied: slot.occupied, 'admin-cursor': isAdmin }" draggable="true"
+            @dragstart="dragStart(slot)" @dragover.prevent @drop="drop(slot)" @click="handleSlotClick(slot, $event)">
+            <img src="/table.png" v-if="slot.isTable" class="table-icon" alt="Mesa" />
+            <div v-if="slot.isTable && isAdmin" class="edit-button" @click.stop="editSlot(slot)">
+            </div>
+            <div v-if="!slot.isTable && isAdmin" class="add-button" @click.stop="editSlot(slot)">
+              <i class="fas fa-plus add-icon"></i>
+            </div>
+            <div v-if="slot.chairs > 0" class="chair-info">
+              <img src="/chair.png" alt="Sillas" class="chair-icon" />
+              <span class="chair-num">{{ slot.chairs }}</span>
+            </div>
           </div>
-          <div v-if="!slot.occupied && isAdmin" class="add-button" @click.stop="editSlot(slot)">
-            <i class="fas fa-plus add-icon"></i>
-          </div>
-          <div v-if="slot.chairs > 0" class="chair-info">
-            <img src="/chair.png" alt="Sillas" class="chair-icon" />
-            <span class="chair-num">{{ slot.chairs }}</span>
+        </div>
+        <TableForm v-if="selectedSlot" :slot="selectedSlot" :pk="selectedSlot.pk" :chairs="selectedSlot.chairs"
+          @close="closeTableForm" @refresh="generateGrid" />
+      </div>
+      <div v-else>
+        <div v-if="loadingSpinnerEnable" class="loading-indicator">
+          <div class="spinner-border orange-spinner" role="status">
+            <span>🍕</span>
           </div>
         </div>
       </div>
-      <TableForm v-if="selectedSlot" :slot="selectedSlot" :pk="selectedSlot.pk" :chairs="selectedSlot.chairs"
-        @close="closeTableForm" @refresh="generateGrid" />
     </div>
-    <div v-else>
-      <div v-if="loadingSpinnerEnable" class="loading-indicator">
-        <div class="spinner-border orange-spinner" role="status">
-          <span>🍕</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
+  </template>
 <script>
 import axios from 'axios';
 import TableForm from './TableForm.vue';
@@ -42,6 +42,10 @@ import TableForm from './TableForm.vue';
 export default {
   components: {
     TableForm,
+  },
+  props: {
+    selectedRanges: Array,
+    highlightSlot: Function
   },
   data() {
     return {
@@ -58,6 +62,9 @@ export default {
   },
   created() {
     this.generateGrid();
+    if (this.selectedRanges) {
+      this.getAvailableTables();
+    }
   },
   computed: {
     minSize() {
@@ -70,6 +77,52 @@ export default {
     },
   },
   methods: {
+    async getAvailableTables() {
+      const restaurantId = this.$route.params.id || this.$route.params.restaurantId;
+
+      try {
+        if (this.selectedRanges.length === 0) {
+          return;
+        }
+        const formattedDate = this.selectedRanges[0].start.toISOString().split('T')[0]; // Extrae solo la fecha sin la hora
+        const response = await axios.get(`/api/restaurants/${restaurantId}/available-tables/`, {
+          params: {
+            day: formattedDate
+          }
+        });
+
+        const availableTables = response.data;
+        // Iterar sobre las mesas y marcarlas como disponibles u ocupadas según la hora actual
+        this.slots.forEach(slot => {
+          const table = availableTables.find(t => t.x_position === slot.x && t.y_position === slot.y);
+          if (table) {
+            slot.occupied = true;
+            table.available_hours.some(hour => {
+              const [start, end] = hour.split('-');
+              const startTime = new Date(table.date + 'T' + start);
+              const endTime = new Date(table.date + 'T' + end);
+              slot.occupied = this.selectedRanges.some(range => range.start <= endTime && range.end >= startTime);
+            });
+          } else {
+            slot.occupied = false;
+          }
+        });
+      } catch (error) {
+        console.error('Error fetching available tables:', error);
+      }
+    },
+
+    updateTableAvailability() {
+      const selectedStart = this.selectedRanges[0].start.toISOString().split('T')[1];
+      this.restaurantTables.forEach(table => {
+        const slot = this.slots.find(s => s.x === table.x_position && s.y === table.y_position);
+        if (slot) {
+          slot.isTable = !table.available_hours.includes(selectedStart);
+          slot.pk = table.pk;
+          slot.chairs = table.max_chairs;
+        }
+      });
+    },
     editSlot(slot) {
       this.selectedSlot = slot;
     },
@@ -87,15 +140,15 @@ export default {
     },
     generateGrid() {
       this.slots = [];
-      for (let x = 1; x <= this.size; x++) {
-        for (let y = 1; y <= this.size; y++) {
-          this.slots.push({ id: `${x}-${y}`, x, y, occupied: false, chairs: 0 });
+      for (let y = 1; y <= this.size; y++) {
+        for (let x = 1; x <= this.size; x++) {
+          this.slots.push({ id: `${x}-${y}`, x, y, isTable: false, occupied: false, chairs: 0 });
         }
       }
       this.fetchTables();
     },
     async fetchTables() {
-      const restaurantId = this.$route.params.id;
+      const restaurantId = this.$route.params.id || this.$route.params.restaurantId;
       try {
         this.tablesLoaded = false;
         setTimeout(() => {
@@ -112,7 +165,7 @@ export default {
         this.restaurantTables.forEach(table => {
           const slot = this.slots.find(s => s.x === table.x_position && s.y === table.y_position);
           if (slot) {
-            slot.occupied = true;
+            slot.isTable = true;
             slot.pk = table.pk;
             slot.chairs = table.max_chairs;
           }
@@ -128,10 +181,21 @@ export default {
         }
       }
     },
-    handleSlotClick(x, y) {
-      const slot = this.slots.find(s => s.x === x && s.y === y);
-      if (slot && !slot.occupied) {
+    handleSlotClick(slot, event) {
+      if (!slot.isTable && this.isAdmin) {
         this.selectedSlot = slot;
+      } else if (slot.isTable && !slot.occupied) {
+
+        // solo en el caso de que haya selectedRanges
+        if (this.selectedRanges) {
+          this.$emit('slot-clicked', slot);
+
+          const slotElement = event.target.closest('.grid-slot');
+          if (!slotElement) {
+            return;
+          }
+          slotElement.classList.toggle('selected-slot');
+        }
       }
     },
     closeTableForm(refresh = false) {
@@ -152,7 +216,7 @@ export default {
           x: targetSlot.x,
           y: targetSlot.y,
           pk: targetSlot.pk,
-          occupied: targetSlot.occupied,
+          isTable: targetSlot.isTable,
           chairs: targetSlot.chairs,
           tableId: targetSlot.tableId,
         };
@@ -162,7 +226,7 @@ export default {
           x: this.draggedSlot.x,
           y: this.draggedSlot.y,
           pk: this.draggedSlot.pk,
-          occupied: this.draggedSlot.occupied,
+          isTable: this.draggedSlot.isTable,
           chairs: this.draggedSlot.chairs,
           tableId: this.draggedSlot.tableId,
         };
@@ -171,14 +235,14 @@ export default {
         targetSlot.x = draggedOriginal.x;
         targetSlot.y = draggedOriginal.y;
         targetSlot.pk = draggedOriginal.pk;
-        targetSlot.occupied = draggedOriginal.occupied;
+        targetSlot.isTable = draggedOriginal.isTable;
         targetSlot.chairs = draggedOriginal.chairs;
         targetSlot.tableId = draggedOriginal.tableId;
 
         this.draggedSlot.x = targetOriginal.x;
         this.draggedSlot.y = targetOriginal.y;
         this.draggedSlot.pk = targetOriginal.pk;
-        this.draggedSlot.occupied = targetOriginal.occupied;
+        this.draggedSlot.isTable = targetOriginal.isTable;
         this.draggedSlot.chairs = targetOriginal.chairs;
         this.draggedSlot.tableId = targetOriginal.tableId;
 
@@ -250,8 +314,12 @@ export default {
   cursor: grabbing;
 }
 
-.grid-slot.occupied {
+.grid-slot.isTable {
   background-color: rgb(178, 222, 255);
+}
+
+.grid-slot.isTableOccupied {
+  background-color: rgb(255, 178, 178);
 }
 
 .table-icon {
@@ -301,5 +369,10 @@ export default {
 .add-icon {
   width: 16px;
   height: 16px;
+}
+
+.selected-slot {
+  border: 5px solid #4CAF50;
+  transition: border 0.3s ease-in-out;
 }
 </style>
