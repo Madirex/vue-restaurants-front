@@ -19,6 +19,11 @@
         </span>
       </div>
 
+      <button type="button" class="btn btn-primary m-2" @click="order">
+        Realizar reserva
+      </button>
+
+      <!-- icono reserva -->
       <h2>Menú</h2>
 
       <router-link v-if="isAdmin" :to="{ name: 'DishCreate', params: { restaurantId: restaurant.pk } }"
@@ -108,9 +113,12 @@
       </div>
 
       <div>
-        <h3>Plano del restaurante</h3>
         <RestaurantMap :restaurant="restaurant" @editSlot="editSlot" />
       </div>
+
+      <button type="button" class="btn btn-primary m-2" @click="order">
+       Realizar reserva
+      </button>
 
 
       <!-- Panel solo si es admin -->
@@ -250,6 +258,9 @@ export default {
     },
     showDeleteModal() {
       this.showModal = true;
+    },
+    order(){
+      this.$router.push({ path: '/restaurants/' + this.restaurant.pk + '/order' });
     },
     showDeleteModalDish(id) {
       this.selectedDish = id;
