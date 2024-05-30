@@ -13,6 +13,7 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
+    "html2pdf.js": "^0.10.1",
     "vue": "^3.4.21",
     "vue-cal": "^4.8.1",
     "vue-router": "^4.3.2"
