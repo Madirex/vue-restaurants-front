@@ -1,4 +1,5 @@
 import Unauthorized from '@/components/Unauthorized.vue';
+import NotFound from '@/components/NotFound.vue';
 import CartCodeCreateEdit from '@/components/cartcodes/CartCodeCreateEdit.vue';
 import CartCodeDetails from '@/components/cartcodes/CartCodeDetails.vue';
 import CategoryCreateEdit from '@/components/categories/CategoryCreateEdit.vue';
@@ -16,8 +17,12 @@ import ClosedDaysConfig from '../components/calendars/ClosedDaysConfig.vue';
 import CustomSchedulesConfig from '../components/calendars/CustomSchedulesConfig.vue';
 import CartCodes from '../components/cartcodes/CartCodes.vue';
 import Categories from '../components/categories/Categories.vue';
+import OrderProcess from '../components/orders/OrderProcess.vue';
 import RestaurantMap from '../components/restaurants/RestaurantMap.vue';
 import Restaurants from '../components/restaurants/Restaurants.vue';
+import OrderDetails from '../components/orders/OrderDetails.vue';
+import UserProfile from '../components/user/UserProfile.vue';
+import Orders from '../components/orders/Orders.vue';
 
 const routes = [
     {
@@ -39,6 +44,11 @@ const routes = [
         path: '/401',
         name: 'Unauthorized',
         component: Unauthorized,
+    },
+    {
+        path: '/404',
+        name: 'NotFound',
+        component: NotFound,
     },
 
     {
@@ -156,6 +166,31 @@ const routes = [
     },
     { path: '/restaurants/:id', name: 'RestaurantDetails', component: RestaurantDetails },
     { path: '/restaurants/:id/map', name: 'RestaurantMap', component: RestaurantMap },
+    {
+        path: '/restaurants/:restaurantId/order',
+        name: 'OrderProcess',
+        component: OrderProcess,
+        props: true
+    },
+    {
+        path: '/orders/:orderId',
+        name: 'OrderDetails',
+        component: OrderDetails,
+        props: true,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/profile',
+        name: 'UserProfile',
+        component: UserProfile,
+        meta: { requiresAuth: true },
+    },
+    {
+        path: '/orders',
+        name: 'Orders',
+        component: Orders,
+        meta: { requiresAuth: true },
+    }
 ];
 
 const router = createRouter({
@@ -166,12 +201,20 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const isAuthenticated = localStorage.getItem('authToken') !== null;
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
+    const isLogged = localStorage.getItem('authToken');
+
 
     if (to.meta.requiresAuth && !isAuthenticated) {
         next({ name: 'Login' });
     } else if (to.name === 'CategoryCreate' || to.name === 'CategoryEdit') {
         if (!isAdmin) {
             next({ name: 'Unauthorized' });
+        } else {
+            next();
+        }
+    } else if (to.name === 'OrderProcess') {
+        if (!isLogged) {
+            next({ name: 'Login' });
         } else {
             next();
         }
