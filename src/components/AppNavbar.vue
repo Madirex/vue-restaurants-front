@@ -18,6 +18,9 @@
           <li class="nav-item">
             <router-link to="/about" class="nav-link">Acerca de</router-link>
           </li>
+          <li v-if="isAuthTokenAvailable" class="nav-item">
+            <router-link to="/orders" class="nav-link">Pedidos</router-link>
+          </li>
           <div v-if="isAdmin">
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -36,6 +39,7 @@
           </div>
         </ul>
         <div v-if="isAuthTokenAvailable">
+          <router-link to="/profile" class="nav-link me-4 m-auto d-block">Perfil</router-link>
           <router-link to="/" class="nav-link" @click="logout">Cerrar sesión</router-link>
         </div>
         <div v-else>
