@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2>Iniciar sesión</h2>
+    <h2 class="title">Iniciar sesión</h2>
 
     <div v-if="alert.message" :class="['alert', alert.type]" role="alert">
       {{ alert.message }}

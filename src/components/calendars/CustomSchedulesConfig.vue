@@ -1,5 +1,5 @@
 <template>
-    <div class="custom-schedules-container">
+    <div class="container mt-4">
         <h3>Horarios Personalizados</h3>
 
         <!-- Alertas de Bootstrap -->
@@ -191,9 +191,6 @@ export default {
 </script>
 
 <style scoped>
-.custom-schedules-container {
-    margin: 20px;
-}
 
 .add-schedule {
     display: flex;

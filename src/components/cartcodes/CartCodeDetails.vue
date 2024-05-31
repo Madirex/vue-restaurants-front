@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
     <div v-if="cartCode">
-      <h2>{{ cartCode.code }}</h2>
+      <h2 class="title">{{ cartCode.code }}</h2>
 
       <!-- Estado del código de carrito -->
       <div>

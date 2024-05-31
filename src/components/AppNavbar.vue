@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="/">
-        <img src="/favicon.png" alt="App Logo" class="d-inline-block align-text-top" width="50" />
+        <img src="/favicon.png" alt="App Logo" class="d-inline-block align-text-top" width="64" />
       </a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -89,7 +89,7 @@ export default {
 
 <style scoped>
 .nav-link:hover {
-  color: #007bff;
+  color: #5f6cff;
   text-decoration: none;
 }
 
@@ -103,6 +103,12 @@ export default {
 
 .navbar-brand:hover {
   transform: scale(1.2);
+}
+
+.navbar{
+  background: rgb(255, 255, 255);
+  font-size: 1.2em;
+  font-family: 'Roboto', sans-serif;
 }
 
 </style>

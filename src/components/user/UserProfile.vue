@@ -1,8 +1,8 @@
 <template>
   <div class="container mt-4">
-    <h2>Perfil del Usuario</h2>
+    <h2 class="title">Perfil del Usuario</h2>
 
-    <div v-if="user">
+    <div v-if="user" class="profile">
       <div class="mb-3">
         <img v-if="user.photo" :src="'/api' + user.photo" alt="Foto de perfil" class="rounded-circle" width="150"
           height="150" />
@@ -50,7 +50,7 @@
     <div v-if="showEditAddressModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeEditAddressModal">&times;</span>
-        <h2>Editar Dirección</h2>
+        <h2 class="title">Editar Dirección</h2>
         <form @submit.prevent="updateAddress">
           <div class="mb-3">
             <label for="street" class="form-label">Calle:</label>
@@ -97,7 +97,7 @@
     <div v-if="showEditProfileModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeEditProfileModal">&times;</span>
-        <h2>Editar Perfil</h2>
+        <h2 class="title">Editar Perfil</h2>
         <form @submit.prevent="updateProfile">
           <div class="mb-3">
             <label for="photo" class="form-label">Foto de perfil:</label>
@@ -436,5 +436,9 @@ export default {
 
 .orange-spinner .spinner-border {
   color: orange;
+}
+
+.profile{
+  text-align: center;
 }
 </style>

@@ -1,6 +1,6 @@
   <template>
     <div class="map-container">
-      <h2>Plano del Restaurante</h2>
+      <h2 class="title">Plano del Restaurante</h2>
       <div v-if="isAdmin" class="controls">
         <label for="size">Tamaño del Plano:</label>
         <input type="number" v-model="size" :min="minSize" max="20" @input="validateSize($event)" />
@@ -124,6 +124,10 @@ export default {
       });
     },
     editSlot(slot) {
+      //comprobar url que no tenga order
+      if (this.$route.name !== 'Order') {
+        return;
+      }
       this.selectedSlot = slot;
     },
     validateSize(event) {
@@ -262,12 +266,16 @@ export default {
               await axios.put(`/api/tables/${draggedOriginal.pk}/`, {
                 x_position: targetOriginal.x,
                 y_position: targetOriginal.y,
+                min_chairs: draggedOriginal.chairs,
+                max_chairs: draggedOriginal.chairs,
               });
             }
             if (targetOriginal.pk) {
               await axios.put(`/api/tables/${targetOriginal.pk}/`, {
                 x_position: draggedOriginal.x,
                 y_position: draggedOriginal.y,
+                min_chairs: targetOriginal.chairs,
+                max_chairs: targetOriginal.chairs,
               });
             }
           }

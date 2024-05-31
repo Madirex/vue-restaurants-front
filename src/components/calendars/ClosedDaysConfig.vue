@@ -1,5 +1,5 @@
 <template>
-    <div class="closed-days-container">
+    <div class="container mt-4">
         <h3>Días Cerrados</h3>
 
         <!-- Alertas de Bootstrap -->
@@ -151,9 +151,6 @@ export default {
 </script>
 
 <style scoped>
-.closed-days-container {
-    margin: 20px;
-}
 
 .add-closed-day {
     display: flex;

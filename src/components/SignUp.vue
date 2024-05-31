@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2>Registro</h2>
+    <h2 class="title">Registro</h2>
 
     <!-- Alertas de Bootstrap -->
     <div v-if="alert.message" :class="['alert', alert.type]" role="alert">

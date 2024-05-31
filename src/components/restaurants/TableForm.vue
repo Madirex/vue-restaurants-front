@@ -26,7 +26,7 @@
           </div>
           <div v-else>
             <button type="submit">Guardar</button>
-            <button type="button" @click="deleteTable" v-if="slot.occupied">Eliminar</button>
+            <button type="button" @click="deleteTable" v-if="slot.isTable">Eliminar</button>
             <button type="button" @click="close">Cancelar</button>
           </div>
         </form>
@@ -49,35 +49,35 @@ export default {
   },
   methods: {
     async saveTable() {
-  const restaurantId = this.$route.params.id;
-  try {
-    this.loading = true;
-    // Verificar si se está editando una mesa existente
-    if (this.pk) {
-      // Si se está editando, realizar una solicitud PUT
-      await axios.put(`/api/tables/${this.pk}/`, {
-        x_position: this.positionX,
-        y_position: this.positionY,
-        max_chairs: this.maxChairs,
-        min_chairs: this.maxChairs,
-      });
-    } else {
-      // Si no se está editando, realizar una solicitud POST
-      await axios.post('/api/tables/', {
-        assigned_restaurant: restaurantId,
-        x_position: this.positionX,
-        y_position: this.positionY,
-        max_chairs: this.maxChairs,
-        min_chairs: this.maxChairs,
-      });
-    }
-    this.$emit('close');
-    this.$emit('refresh');
-  } catch (error) {
-    console.error('Error saving table:', error);
-  }
-  this.loading = false;
-},
+      const restaurantId = this.$route.params.id;
+      try {
+        this.loading = true;
+        // Verificar si se está editando una mesa existente
+        if (this.pk) {
+          // Si se está editando, realizar una solicitud PUT
+          await axios.put(`/api/tables/${this.pk}/`, {
+            x_position: this.positionX,
+            y_position: this.positionY,
+            max_chairs: this.maxChairs,
+            min_chairs: this.maxChairs,
+          });
+        } else {
+          // Si no se está editando, realizar una solicitud POST
+          await axios.post('/api/tables/', {
+            assigned_restaurant: restaurantId,
+            x_position: this.positionX,
+            y_position: this.positionY,
+            max_chairs: this.maxChairs,
+            min_chairs: this.maxChairs,
+          });
+        }
+        this.$emit('close');
+        this.$emit('refresh');
+      } catch (error) {
+        console.error('Error saving table:', error);
+      }
+      this.loading = false;
+    },
 
     async deleteTable() {
       try {

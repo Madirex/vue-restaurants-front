@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-4">
     <div v-if="restaurant">
-      <h2>{{ restaurant.name }}</h2>
+      <h2 class="title">{{ restaurant.name }}</h2>
 
       <!-- Dirección del Restaurante -->
       <div v-if="restaurant.address" class="address">
@@ -24,7 +24,7 @@
       </button>
 
       <!-- icono reserva -->
-      <h2>Menú</h2>
+      <h2 class="title">Menú</h2>
 
       <router-link v-if="isAdmin" :to="{ name: 'DishCreate', params: { restaurantId: restaurant.pk } }"
         class="btn btn-success m-2">
@@ -83,7 +83,7 @@
         </div>
         <vue-cal :events="schedules" class="vuecal" @view-change="handleViewChange" @cell-click="handleCellClick">
           <template v-slot:event="{ event }">
-            <div :style="{ backgroundColor: event.class === 'schedule-open' ? '#5b9e5b' : 'red', color: 'white' }">{{
+            <div :style="{ backgroundColor: event.class === 'schedule-open' ? '#82bc82' : 'red', color: 'white', fontSize: 'smaller' }">{{
               event.title }}</div>
           </template>
 
@@ -236,7 +236,7 @@ export default {
             return schedule.schedule.map(time => ({
               start: new Date(`${schedule.date}T${time}`),
               end: new Date(`${schedule.date}T${new Date(new Date(`${schedule.date}T${time}`).getTime() + 30 * 60000).toISOString().split('T')[1]}`), // Añadir 30 minutos a la hora de inicio
-              title: 'Abierto',
+              title: time,
               class: 'schedule-open',
             }));
           });
@@ -314,6 +314,11 @@ export default {
 </script>
 
 <style scoped>
+
+.vuecal{
+  background-color: #fff;
+}
+
 .address {
   font-style: italic;
   margin-bottom: 20px;
@@ -321,13 +326,14 @@ export default {
 
 .dish {
   border: 1px solid #ccc;
+  background-color: #dbdbdb;
   border-radius: 5px;
   padding: 10px;
   margin-top: 10px;
 }
 
 .dish img {
-  max-width: 100px;
+  max-width: 200px;
   margin-right: 10px;
   border-radius: 5px;
 }
@@ -340,6 +346,7 @@ export default {
 /* Estilo del contenedor del slider */
 .slider-container {
   overflow-x: hidden;
+  text-align: center;
 }
 
 /* Estilo de los platos */
@@ -378,8 +385,4 @@ export default {
   position: relative;
 }
 
-.schedule-open {
-  background-color: green !important;
-  color: white !important;
-}
 </style>

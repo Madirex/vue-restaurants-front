@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-4">
-      <h2>Pedidos</h2>
+      <h2 class="title">Pedidos</h2>
   
       <div v-if="loading && loadingSpinnerEnable" class="loading-indicator">
         <div class="spinner-border orange-spinner" role="status">

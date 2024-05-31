@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-4">
-        <h2>Restaurantes</h2>
+        <h2 class="title">Restaurantes</h2>
 
         <button v-if="isAdmin" type="button" class="btn btn-success mb-3" @click="createRestaurant">Crear
             restaurante</button>
@@ -157,7 +157,8 @@ export default {
 
 <style scoped>
 .restaurant {
-    border: 1px solid #ccc;
+    border: 1px solid #aaa;
+    background-color: #e5e5e5;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 10px;

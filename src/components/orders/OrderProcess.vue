@@ -1,6 +1,6 @@
 <template>
     <div id="toast-container"></div>
-    <div class="order-process">
+    <div class="container mt-4 order-process">
         <div class="steps">
             <div v-for="(step, index) in steps" :key="index" :class="{ 'active': currentStep === index }"
                 @click="goToStep(index)">
@@ -9,7 +9,7 @@
         </div>
         <div v-if="currentStep === 0">
             <!-- Primera fase: Calendario -->
-            <h2>Selecciona el día y hora de tu reserva</h2>
+            <h2 class="title">Selecciona el día y hora de tu reserva</h2>
             <div v-if="loadingSchedules && !waitingLoadingDelay" class="loading-overlay">
                 <div class="spinner-border text-light" role="status">
                     <span class="sr-only">Loading...</span>
@@ -18,7 +18,7 @@
             <div v-if="selectedRanges.length === 0">
                 <vue-cal :events="schedules" class="vuecal" @view-change="handleViewChange">
                     <template #event="{ event }">
-                        <div :style="{ backgroundColor: event.class === 'schedule-open' ? '#5b9e5b' : 'orange', color: 'white' }"
+                        <div :style="{ backgroundColor: event.class === 'schedule-open' ? '#82bc82' : 'red', color: 'white', fontSize: 'smaller' }"
                             class="clickable" @click="handleEventClick(event)">{{ event.title }}</div>
                     </template>
                     <template #events-count="{ events }">
@@ -55,12 +55,12 @@
         </div>
         <div v-if="currentStep === 2">
             <!-- Tercera fase: Menú -->
-            <h2>Selecciona el menú que quieres reservar</h2>
+            <h2 class="title">Selecciona el menú que quieres reservar</h2>
             <div class="dishes" :style="{ transform: `translateX(${translateValue}px)` }">
                 <div v-for="dish in dishes" :key="dish.pk" class="dish">
                     <h3>{{ dish.name }}</h3>
                     <p>{{ dish.description }}</p>
-                    <p>Precio: {{ dish.price }}</p>
+                    <p>Precio: {{ dish.price }} €</p>
                     <p>Calorias: {{ dish.calories }}</p>
                     <p>Tiempo de preparación: {{ dish.preparation_time }} minutos</p>
                     <p>Categoría: {{ dish.category }}</p>
@@ -99,10 +99,10 @@
                 <h3>Resumen de Platos</h3>
                 <ul>
                     <li v-for="dish in dishes" :key="dish.pk">
-                        {{ dish.name }} - {{ dish.price * dish.quantity }}€
+                        {{ dish.name }} - {{ (dish.price * dish.quantity).toFixed(2) }} €
                     </li>
                 </ul>
-                <h4>Total: {{ totalPrice }}€</h4>
+                <h4>Total: {{ totalPrice.toFixed(2) }} €</h4>
                 <button type="button" class="btn btn-primary" :disabled="totalPrice === 0 || pushingOrder"
                     @click="placeOrder">Realizar
                     pedido</button>
@@ -331,7 +331,7 @@ export default {
                                 return {
                                     start,
                                     end,
-                                    title: 'Abierto',
+                                    title: time,
                                     class: 'schedule-open',
                                 };
                             })
@@ -359,6 +359,10 @@ export default {
 </script>
 
 <style scoped>
+.vuecal{
+  background-color: #fff;
+}
+
 .clickable {
     cursor: pointer;
 }
@@ -415,6 +419,7 @@ export default {
     flex: 1 1 calc(33.333% - 20px);
     box-sizing: border-box;
     text-align: center;
+    background-color: #e3e3e3;
 }
 
 .dish-image {

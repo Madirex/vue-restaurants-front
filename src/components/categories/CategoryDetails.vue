@@ -1,7 +1,7 @@
 <template>
     <div class="container mt-4">
         <div v-if="category">
-            <h2>{{ category.name.charAt(0).toUpperCase() + category.name.slice(1) }}</h2>
+            <h2 class="title">{{ category.name.charAt(0).toUpperCase() + category.name.slice(1) }}</h2>
 
             <!-- panel solo si es admin -->
             <div v-if="isAdmin">

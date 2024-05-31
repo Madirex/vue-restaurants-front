@@ -1,5 +1,5 @@
 <template>
-    <div class="seasonal-calendar-container">
+    <div class="container mt-4">
         <h3>Calendario Estacional</h3>
 
         <!-- Alertas de Bootstrap -->
@@ -346,10 +346,6 @@ export default {
 </script>
 
 <style scoped>
-.seasonal-calendar-container {
-    margin: 20px;
-}
-
 .season-section {
     margin-bottom: 20px;
 }

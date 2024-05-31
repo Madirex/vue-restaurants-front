@@ -1,6 +1,5 @@
 <template>
   <div class="container mt-4">
-    <h2>Inicio</h2>
     <Restaurants></Restaurants>
   </div>
 </template>

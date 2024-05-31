@@ -12,6 +12,8 @@
     </div>
     <router-view />
   </div>
+  <!-- footer -->
+  <AppFooter />
 </template>
 
 <script>
@@ -20,6 +22,7 @@ import SignUp from './components/SignUp.vue';
 import Login from './components/Login.vue';
 import Home from './components/Home.vue';
 import AppNavbar from './components/AppNavbar.vue';
+import AppFooter from './components/AppFooter.vue';
 
 export default {
   components: {
@@ -27,6 +30,7 @@ export default {
     Login,
     Home,
     AppNavbar,
+    AppFooter,
   },
   data() {
     return {
@@ -47,7 +51,6 @@ header {
 }
 
 
-
 @media (min-width: 1024px) {
   header {
     display: flex;
@@ -64,5 +67,9 @@ header {
     place-items: flex-start;
     flex-wrap: wrap;
   }
+}
+
+.alert{
+  margin: 1rem;
 }
 </style>

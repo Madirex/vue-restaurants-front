@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2>{{ mode === 'create' ? 'Crear' : 'Editar' }} Plato</h2>
+    <h2 class="title">{{ mode === 'create' ? 'Crear' : 'Editar' }} Plato</h2>
 
     <div class="alert" :class="[alert.type, { 'd-none': !alert.message }]">
       {{ alert.message }}
