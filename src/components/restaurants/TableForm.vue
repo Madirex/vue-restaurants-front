@@ -25,9 +25,9 @@
             </div>
           </div>
           <div v-else>
-            <button type="submit">Guardar</button>
-            <button type="button" @click="deleteTable" v-if="slot.isTable">Eliminar</button>
-            <button type="button" @click="close">Cancelar</button>
+            <button type="submit" class="btn btn-primary m-2">Guardar</button>
+            <button type="button" class="btn btn-danger m-2" @click="deleteTable" v-if="slot.isTable">Eliminar</button>
+            <button type="button" class="btn btn-secondary m-2" @click="close">Cancelar</button>
           </div>
         </form>
       </div>

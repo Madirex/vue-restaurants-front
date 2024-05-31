@@ -124,10 +124,6 @@ export default {
       });
     },
     editSlot(slot) {
-      //comprobar url que no tenga order
-      if (this.$route.name !== 'Order') {
-        return;
-      }
       this.selectedSlot = slot;
     },
     validateSize(event) {
