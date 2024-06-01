@@ -67,17 +67,21 @@ export default {
     formatDate(dateString) {
       if (dateString) {
         const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = ('0' + (date.getMonth() + 1)).slice(-2);
-        const day = ('0' + date.getDate()).slice(-2);
-        const hours = ('0' + date.getHours()).slice(-2);
-        const minutes = ('0' + date.getMinutes()).slice(-2);
-        const seconds = ('0' + date.getSeconds()).slice(-2);
-
-        return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        const options = {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+          timeZone: 'UTC'
+        };
+        return date.toLocaleDateString('es-ES', options);
       }
       return '';
     },
+
     getStatusText(status) {
       switch (status) {
         case 'pending':

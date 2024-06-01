@@ -98,18 +98,26 @@ export default {
           if (table) {
             slot.occupied = true;
             table.available_hours.some(hour => {
-              const [start, end] = hour.split('-');
-              const startTime = new Date(table.date + 'T' + start);
-              const endTime = new Date(table.date + 'T' + end);
-              slot.occupied = this.selectedRanges.some(range => range.start <= endTime && range.end >= startTime);
+              this.selectedRanges.forEach((range, index) => {
+                const startTime = this.formatTime(range.start);
+                const endTime = this.formatTime(range.end);
+                console.log(`Rango ${index + 1} - Hora de inicio: ${startTime}, Hora de fin: ${endTime} --- ${hour}`);
+                if (hour >= startTime && hour < endTime) {
+                  slot.occupied = false;
+                }
+              });
             });
-          } else {
-            slot.occupied = false;
           }
         });
       } catch (error) {
         console.error('Error fetching available tables:', error);
       }
+    },
+    formatTime(date) {
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      return `${hours}:${minutes}:${seconds}`;
     },
 
     updateTableAvailability() {
