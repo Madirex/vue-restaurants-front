@@ -101,7 +101,6 @@ export default {
               this.selectedRanges.forEach((range, index) => {
                 const startTime = this.formatTime(range.start);
                 const endTime = this.formatTime(range.end);
-                console.log(`Rango ${index + 1} - Hora de inicio: ${startTime}, Hora de fin: ${endTime} --- ${hour}`);
                 if (hour >= startTime && hour < endTime) {
                   slot.occupied = false;
                 }

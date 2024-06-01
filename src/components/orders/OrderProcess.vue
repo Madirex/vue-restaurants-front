@@ -98,9 +98,11 @@
             <div class="dish-summary">
                 <h3>Resumen de Platos</h3>
                 <ul>
-                    <li v-for="dish in dishes" :key="dish.pk">
-                        {{ dish.name }} - {{ (dish.price * dish.quantity).toFixed(2) }} €
-                    </li>
+                    <div v-for="dish in dishes" :key="dish.pk">
+                        <li v-if="dish.quantity > 0">
+                            {{ dish.name }} - {{ (dish.price * dish.quantity).toFixed(2) }} €
+                        </li>
+                    </div>
                 </ul>
                 <h4>Total: {{ totalPrice.toFixed(2) }} €</h4>
                 <button type="button" class="btn btn-primary" :disabled="totalPrice === 0 || pushingOrder"
@@ -359,8 +361,8 @@ export default {
 </script>
 
 <style scoped>
-.vuecal{
-  background-color: #fff;
+.vuecal {
+    background-color: #fff;
 }
 
 .clickable {

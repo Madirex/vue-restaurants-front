@@ -19,9 +19,11 @@
         </span>
       </div>
 
-      <button type="button" class="btn btn-primary m-2" @click="order">
-        Realizar reserva
-      </button>
+      <div class="reserve-button">
+        <button type="button" class="btn btn-primary" @click="order">
+          Realizar reserva
+        </button>
+      </div>
 
       <!-- icono reserva -->
       <h2 class="title">Menú</h2>
@@ -34,46 +36,43 @@
       <div class="slider-container" ref="sliderContainer">
         <!-- Platos del Restaurante -->
         <div class="dishes" :style="{ transform: `translateX(${translateValue}px)` }">
-          <div v-for="dish in dishes" :key="dish.pk" class="dish">
-            <h3>{{ dish.name }}</h3>
-            <p>{{ dish.description }}</p>
-            <p>Precio: {{ dish.price }}</p>
-            <p>Calorias: {{ dish.calories }}</p>
-            <p>Tiempo de preparación: {{ dish.preparation_time }} minutos</p>
-            <p>Categoría: {{ dish.category }}</p>
-            <p>Tipo de plato:
-              <span v-if="dish.dish_type === 'APPETIZER'">Aperitivo</span>
-              <span v-if="dish.dish_type === 'MAIN_COURSE'">Plato principal</span>
-              <span v-if="dish.dish_type === 'DESSERT'">Postre</span>
-              <span v-if="dish.dish_type === 'DRINK'">Bebida</span>
-              <span v-if="dish.dish_type === 'OTHER'">Otro</span>
-            </p>
-            <a class="dish-image">
-              <img v-if="dish.image" :src="imagePath + dish.image" alt="Dish Image">
-            </a>
+          <div v-for="type in uniqueDishTypes" :key="type" class="dish-type">
+            <h4 class="title mt-4">{{ getTypeTitle(type) }}</h4>
+            <div v-for="dish in getDishesByType(type)" :key="dish.pk" class="dish">
+              <h5 class="title-dish">{{ dish.name }}</h5>
+              <p>Precio: {{ dish.price }} €</p>
+              <p>Calorias: {{ dish.calories }}</p>
+              <p>Tiempo de preparación: {{ dish.preparation_time }} minutos</p>
+              <p>Categoría: {{ dish.category }}</p>
+              <a class="dish-image m-3">
+                <img v-if="dish.image" :src="imagePath + dish.image" alt="Dish Image">
+              </a>
+              <p>{{ dish.description }}</p>
 
-            <!-- Panel de administrador -->
-            <div v-if="isAdmin" class="admin-panel">
-              <!-- Botón de eliminación -->
-              <button type="button" class="btn btn-danger m-2" @click="showDeleteModalDish(dish.pk)">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-              <!-- Botón de edición -->
-              <router-link :to="{ name: 'DishEdit', params: { id: dish.pk, restaurantId: restaurant.pk } }"
-                class="btn btn-primary m-2">
-                <i class="fas fa-edit"></i>
-              </router-link>
+              <!-- Panel de administrador -->
+              <div v-if="isAdmin" class="admin-panel">
+                <!-- Botón de eliminación -->
+                <button type="button" class="btn btn-danger m-2" @click="showDeleteModalDish(dish.pk)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+                <!-- Botón de edición -->
+                <router-link :to="{ name: 'DishEdit', params: { id: dish.pk, restaurantId: restaurant.pk } }"
+                  class="btn btn-primary m-2">
+                  <i class="fas fa-edit"></i>
+                </router-link>
+              </div>
             </div>
           </div>
 
-          <!-- si dishes está vacío -->
+          <!-- si no hay platos disponibles -->
           <div v-if="dishes.length === 0" class="alert alert-info" role="alert">
             No hay platos disponibles
           </div>
         </div>
+
       </div>
 
-      <h3>Horarios</h3>
+      <h3 class="title">Horarios</h3>
       <div class="calendar-container">
         <!-- Indicador de carga -->
         <div v-if="loadingSchedules && !waitingLoadingDelay" class="loading-overlay">
@@ -83,8 +82,10 @@
         </div>
         <vue-cal :events="schedules" class="vuecal" @view-change="handleViewChange" @cell-click="handleCellClick">
           <template v-slot:event="{ event }">
-            <div :style="{ backgroundColor: event.class === 'schedule-open' ? '#82bc82' : 'red', color: 'white', fontSize: 'smaller' }">{{
-              event.title }}</div>
+            <div
+              :style="{ backgroundColor: event.class === 'schedule-open' ? '#82bc82' : 'red', color: 'white', fontSize: 'smaller' }">
+              {{
+                event.title }}</div>
           </template>
 
           <template #events-count="{ events }">
@@ -116,9 +117,11 @@
         <RestaurantMap :restaurant="restaurant" @editSlot="editSlot" />
       </div>
 
-      <button type="button" class="btn btn-primary m-2" @click="order">
-       Realizar reserva
-      </button>
+      <div class="reserve-button">
+        <button type="button" class="btn btn-primary" @click="order">
+          Realizar reserva
+        </button>
+      </div>
 
 
       <!-- Panel solo si es admin -->
@@ -191,7 +194,31 @@ export default {
     this.fetchRestaurantDetails();
     this.fetchRestaurantSchedules();
   },
+  computed: {
+    uniqueDishTypes() {
+      return [...new Set(this.dishes.map(dish => dish.dish_type))];
+    },
+  },
   methods: {
+    getDishesByType(type) {
+      return this.dishes.filter(dish => dish.dish_type === type);
+    },
+    getTypeTitle(type) {
+      switch (type) {
+        case 'APPETIZER':
+          return 'Aperitivos';
+        case 'MAIN_COURSE':
+          return 'Platos principales';
+        case 'DESSERT':
+          return 'Postres';
+        case 'DRINK':
+          return 'Bebidas';
+        case 'OTHER':
+          return 'Otros';
+        default:
+          return 'Desconocido';
+      }
+    },
     async fetchRestaurantDetails() {
       try {
         const id = this.$route.params.id;
@@ -259,7 +286,7 @@ export default {
     showDeleteModal() {
       this.showModal = true;
     },
-    order(){
+    order() {
       this.$router.push({ path: '/restaurants/' + this.restaurant.pk + '/order' });
     },
     showDeleteModalDish(id) {
@@ -314,8 +341,13 @@ export default {
 </script>
 
 <style scoped>
+.reserve-button {
+  display: flex !important;
+  flex-direction: column;
+  margin: 40px !important;
+}
 
-.vuecal{
+.vuecal {
   background-color: #fff;
 }
 
@@ -341,6 +373,10 @@ export default {
 .dish-details {
   display: inline-block;
   vertical-align: top;
+}
+
+.dish p {
+  margin: 1px;
 }
 
 /* Estilo del contenedor del slider */
@@ -384,5 +420,4 @@ export default {
 .calendar-container {
   position: relative;
 }
-
 </style>
