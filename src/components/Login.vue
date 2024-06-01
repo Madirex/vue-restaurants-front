@@ -1,8 +1,7 @@
 <template>
   <div class="container mt-4">
-    <h2>Iniciar sesión</h2>
+    <h2 class="title">Iniciar sesión</h2>
 
-    <!-- Mensajes de error -->
     <div v-if="alert.message" :class="['alert', alert.type]" role="alert">
       {{ alert.message }}
     </div>
@@ -48,7 +47,6 @@ export default {
   },
   methods: {
     async login() {
-
       this.isSubmitting = true;
 
       try {
@@ -56,8 +54,8 @@ export default {
           email: this.email,
           password: this.password,
         });
-        const token = response.data.access_token;
-        localStorage.setItem('authToken', token);
+        localStorage.setItem('authToken', response.data.access_token);
+        localStorage.setItem('isAdmin', response.data.user.is_admin);
         window.location.reload();
       } catch (error) {
         this.isSubmitting = false;

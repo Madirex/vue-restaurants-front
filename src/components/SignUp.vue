@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h2>Registro</h2>
+    <h2 class="title">Registro</h2>
 
     <!-- Alertas de Bootstrap -->
     <div v-if="alert.message" :class="['alert', alert.type]" role="alert">
@@ -105,9 +105,7 @@ export default {
             'Content-Type': 'application/json',
           },
         });
-
-        const token = response.data.token;
-        localStorage.setItem('authToken', token);
+        localStorage.setItem('authToken', response.data.access_token);
         window.location.reload();
 
       } catch (error) {
