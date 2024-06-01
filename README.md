@@ -2,6 +2,8 @@
 
 Proyecto front para la gestión de un grupo de restaurantes. Creado con Vue.
 
+[Ir al proyecto del backend (desarrollado en Django)](https://github.com/Madirex/django-restaurants-api/)
+
 ## Restaurantes
 El proyecto cuenta con una serie de restaurantes.
 ![Descripción de la imagen](/images/img1.png)
