@@ -187,7 +187,7 @@ export default {
     };
   },
   created() {
-    this.imagePath = import.meta.env.VUE_APP_SERVER_URL || 'https://server.madirex.com:8000';
+    this.imagePath = import.meta.env.VUE_APP_SERVER_URL || 'https://localhost:8000';
     setTimeout(() => {
       this.loadingSpinnerEnable = true;
     }, 1000);
