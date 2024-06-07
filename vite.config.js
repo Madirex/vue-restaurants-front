@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 
-const serverUrl = process.env.VUE_APP_SERVER_URL || 'https://localhost:8000';
+const serverUrl = process.env.VUE_APP_SERVER_URL || 'https://server.madirex.com:8000';
 
 export default defineConfig({
   plugins: [vue()],
