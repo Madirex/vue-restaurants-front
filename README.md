@@ -23,6 +23,10 @@ El usuario puede realizar reservas al restaurante seleccionado. Seleccionar la h
 
 ## Comandos
 
+Para instalar las dependencias, ejecuta el siguiente comando:
+
+        npm i
+
 Para iniciar el servidor de desarrollo, ejecuta el siguiente comando:
 
         npm run dev
