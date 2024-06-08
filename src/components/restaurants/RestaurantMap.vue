@@ -353,7 +353,8 @@ export default {
 }
 
 .chair-icon {
-  width: 20px;
+  width: 30px;
+  max-width: 100%;
   height: auto;
   margin-right: 5px;
 }
