@@ -76,7 +76,7 @@
                     </a>
                     <div class="quantity-controls">
                         <button @click="decreaseQuantity(dish)" class="btn btn-secondary">-</button>
-                        <input type="range" min="0" max="25" v-model="dish.quantity" @input="updateTotalPrice" />
+                        <input type="range" min="0" max="25" v-model.number="dish.quantity" @input="updateTotalPrice" />
                         <button @click="increaseQuantity(dish)" class="btn btn-secondary">+</button>
                     </div>
                     <p>Cantidad: {{ dish.quantity }}</p>
